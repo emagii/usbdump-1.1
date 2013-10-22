@@ -45,6 +45,7 @@ int64_t start_ts = 0;
 int32_t start_ts_us = 0;
 char **lines = {0};
 
+int	dummy;	/* Avoid compile-time warnings */
 
 char *pretty_xfertype[] = {
 	" iso",
@@ -80,7 +81,7 @@ void hexdump(char *linebuf, void *address, int length)
 
 void process_packet(struct usbmon_packet *hdr, char *data)
 {
-	static int unique_ready = 0, unique_cnt = 0, unique_setcnt = 0, cnt = 0;
+	static int unique_ready = 0, unique_cnt = 0, unique_setcnt = 0;
 	int i;
 	int64_t ts;
 	int32_t ts_us;
@@ -255,7 +256,7 @@ int check_device(struct dirent *de, char *vidpid, int *bus, int *address)
 	if ( (fd = open(path, O_RDONLY)) == -1 )
 		return 0;
 	memset(buf, 0, 5);
-	read(fd, buf, 4);
+	dummy = read(fd, buf, 4);
 	*bus = strtol(buf, NULL, 10);
 
 	/* address */
@@ -263,7 +264,7 @@ int check_device(struct dirent *de, char *vidpid, int *bus, int *address)
 	if ( (fd = open(path, O_RDONLY)) == -1 )
 		return 0;
 	memset(buf, 0, 5);
-	read(fd, buf, 4);
+	dummy = read(fd, buf, 4);
 	*address = strtol(buf, NULL, 10);
 
 	return 1;
@@ -274,7 +275,6 @@ int find_device(char *vidpid, int *bus, int *address)
 {
 	DIR *dir;
 	struct dirent *de;
-	char buf[16];
 	int found;
 
 	if ( !(dir = opendir(SYSBASE)) )
@@ -304,7 +304,7 @@ void usage(void)
 int main(int argc, char **argv)
 {
 	int opt, bus, address;
-	char *device, *entry;
+	char *device;
 
 	device = NULL;
 	while ((opt = getopt(argc, argv, "d:u:")) != -1) {
