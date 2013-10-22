@@ -11,3 +11,17 @@ Makefile.in
 /depcomp
 /install-sh
 /missing
+
+
+*~
+*.o
+
+/.deps
+/Makefile
+/config.*
+/src/.deps
+/src/.dirstamp
+/stamp-h1
+/usbdump
+
+
